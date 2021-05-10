@@ -64,14 +64,25 @@ public class MainTest {
 //            System.out.println("SCHEDULE: " + optimalSchedule);
 //            System.out.println("GANTT: " + optimalSchedule.asciiGantt());
 
-            GreedySolver solver=new GreedySolver(GreedySolver.Priority.SPT);
+
+            GreedySolver solver=new GreedySolver(GreedySolver.Priority.LPT);
             Instance essai = Instance.fromFile(Paths.get("instances/aaa3"));
-            Schedule greedyschedule=solver.solve(essai,1000000).schedule.get();
-            System.out.println("test solver");
-            System.out.println("VALID: " + greedyschedule.isValid());
-            System.out.println("MAKESPAN: " + greedyschedule.makespan());
-            System.out.println("SCHEDULE: " + greedyschedule);
-            System.out.println("GANTT: " + greedyschedule.asciiGantt());
+            int num=10;
+            String base="instances/la";
+            while(num<=40){
+                String result=base + String.valueOf(num) ;
+
+                essai = Instance.fromFile(Paths.get(result));
+                Schedule greedyschedule=solver.solve(essai,1000000).schedule.get();
+                System.out.println("test solver");
+                System.out.println("VALID: " + greedyschedule.isValid());
+                System.out.println(num);
+//                System.out.println("MAKESPAN: " + greedyschedule.makespan());
+//                System.out.println("SCHEDULE: " + greedyschedule);
+//                System.out.println("GANTT: " + greedyschedule.asciiGantt());
+                num++;
+            }
+
 
         } catch (IOException e) {
             e.printStackTrace();

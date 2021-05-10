@@ -29,51 +29,45 @@ public class GreedySolver implements Solver {
     public Result solve(Instance instance, long deadline) {
         ResourceOrder greedyOrder = new ResourceOrder(instance);
         int numJobs= instance.numJobs;
-        int numMachines=instance.numMachines-1;
-
-        Set<Task> taches = new HashSet<>();
+        int numMachines=instance.numMachines;
         //initialisation des tâches réalisables
-        //liste donnant nombre de taches réalisés pour chaque job
-        Integer[] tasksdone=new Integer[numJobs];
-        //initialisation du tableau
-        for (int l=0;l<numJobs;l++){
-            tasksdone[l]=0;
-        }
+        Set<Task> taches = new HashSet<>();
+
+
         //on mets les taches réalisables
         for (int j=0;j<numJobs;j++) {
-            for (int i = 0; i < numMachines; i++) {
-                if (instance.task_with_machine(j,i)==tasksdone[j]){
-                    taches.add(new Task(j,tasksdone[j]));
-                }
-            }
+            taches.add(new Task(j,0));
         }
         while (!taches.isEmpty()) {
             Task addTask = null;
             int i=0;
-            for(Task t : taches){
-                if (i==0){
-                    addTask=t;
-                    i=1;
+            for(Task t : taches) {
+                if (i == 0) {
+                    addTask = t;
+                    i = 1;
                 }
-                if (priority == Priority.SPT){
+                if (priority == Priority.SPT) {
                     //on choppe le temps que ça met puis on compare et on update selon
-                   if (instance.duration(addTask)>instance.duration(t)) {
-                       addTask =t;
+                    if (instance.duration(addTask) > instance.duration(t)) {
+                        addTask = t;
                     }
                 } else if (priority == Priority.LPT) {
                     //on choppe le temps que ça met puis on compare et on update selon
-                    if (instance.duration(addTask)<instance.duration(t)) {
+                    if (instance.duration(addTask) < instance.duration(t)) {
                         addTask = t;
                     }
+                } else if (priority== Priority.EST_SPT){
+                    t.
                 }
-
+            }
                 //faut rajouter dans l'ordre des machines
                 greedyOrder.addTaskToMachine(instance.machine(addTask),addTask);
 
-            }
+
             //on enlève la tâche ajouté dans greedyorder et on ajoute la suivante
             taches.remove(addTask);
-            if (numMachines>=addTask.task+1) {
+
+            if (numMachines>addTask.task+1) {
                 taches.add(new Task(addTask.job, addTask.task + 1));
             }
         }
