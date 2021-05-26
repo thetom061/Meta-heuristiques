@@ -2,6 +2,7 @@ package jobshop.solvers;
 
 import jobshop.Instance;
 import jobshop.Result;
+import jobshop.solvers.neighborhood.Nowicki;
 
 /** Common interface that must implemented by all solvers. */
 public interface Solver {
@@ -21,7 +22,11 @@ public interface Solver {
             case "basic": return new BasicSolver();
             case "random": return new RandomSolver();
             case "spt": return new GreedySolver(GreedySolver.Priority.SPT);
-            // TODO: add new solvers
+            case "lrpt": return new GreedySolver(GreedySolver.Priority.LRPT);
+            case "estspt": return new GreedySolver(GreedySolver.Priority.EST_SPT);
+            case "estlrpt": return new GreedySolver(GreedySolver.Priority.EST_LRPT);
+            case "desspt": return new DescentSolver(new Nowicki(),new GreedySolver(GreedySolver.Priority.EST_SPT));
+            case "deslrpt": return new DescentSolver(new Nowicki(),new GreedySolver(GreedySolver.Priority.EST_LRPT));
             default: throw new RuntimeException("Unknown solver: "+ name);
         }
     }

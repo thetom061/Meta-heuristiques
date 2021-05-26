@@ -1,6 +1,7 @@
 package jobshop.solvers.neighborhood;
 
 import jobshop.encodings.ResourceOrder;
+import jobshop.encodings.Task;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -78,13 +79,14 @@ public class Nowicki extends Neighborhood<ResourceOrder> {
         /** Apply this swap on the given ResourceOrder, transforming it into a new solution. */
         @Override
         public void applyOn(ResourceOrder current) {
-            throw new UnsupportedOperationException();
+            current.swapTasks(machine,t1,t2);
         }
 
         /** Unapply this swap on the neighbor, transforming it back into the original solution. */
         @Override
         public void undoApplyOn(ResourceOrder current) {
-            throw new UnsupportedOperationException();
+
+            current.swapTasks(machine,t1,t2);
         }
     }
 
@@ -109,13 +111,43 @@ public class Nowicki extends Neighborhood<ResourceOrder> {
 
     /** Returns a list of all the blocks of the critical path. */
     List<Block> blocksOfCriticalPath(ResourceOrder order) {
-        throw new UnsupportedOperationException();
+        List<Block> list= new ArrayList<>();
+        List <Task> critical=order.toSchedule().get().criticalPath();
+        int previousMach=-1,currentMach=-1,first=0,last=0,i=0,j=0;
+        Task prevtask=null;
+        for (Task task : critical){
+            if (i>0){
+                previousMach=currentMach;
+            }
+            currentMach=order.instance.machine(task);
+            if (i>0 && previousMach==currentMach){
+                last=i;
+            }else{
+                if (first<last){
+
+                    while (!prevtask.equals(order.getTaskOfMachine(previousMach,j))){
+                        j++;
+                    }
+                    Block block=new Block(previousMach,j-(last-first),j);
+                    list.add(block);
+                    j=0;
+                }
+                first=i;
+            }
+            i++;
+            prevtask=task;
+        }
+        return list;
     }
 
     /** For a given block, return the possible swaps for the Nowicki and Smutnicki neighborhood */
     List<Swap> neighbors(Block block) {
-        throw new UnsupportedOperationException();
-
+        List<Swap> list=new ArrayList<>();
+        for (int i=block.firstTask;i<block.lastTask;i++){
+            Swap swap=new Swap(block.machine,i,i+1);
+            list.add(swap);
+        }
+     return list;
     }
 
 }
