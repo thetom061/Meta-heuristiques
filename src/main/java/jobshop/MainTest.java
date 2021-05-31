@@ -68,9 +68,9 @@ public class MainTest {
 //            System.out.println("GANTT: " + optimalSchedule.asciiGantt());
 
 
-            GreedySolver solver=new GreedySolver(GreedySolver.Priority.EST_SPT);
+            GreedySolver solver=new GreedySolver(GreedySolver.Priority.EST_LRPT);
             DescentSolver bestsolver=new DescentSolver(new Nowicki(),solver);
-            TabooSolver taboosolver=new TabooSolver(new Nowicki(),solver,10,3);
+            TabooSolver taboosolver=new TabooSolver(new Nowicki(),solver,10,5);
             Instance essai = Instance.fromFile(Paths.get("instances/aaa3"));
 //            int num=10;
 //            String base="instances/la";
@@ -78,7 +78,7 @@ public class MainTest {
 //                String result=base + String.valueOf(num) ;
 //
 //                essai = Instance.fromFile(Paths.get(result));
-                Schedule greedyschedule=solver.solve(essai,1000000).schedule.get();
+                Schedule greedyschedule=taboosolver.solve(essai,1000000).schedule.get();
 //                System.out.println("Numbers of Neighbors Explored:" +bestsolver.getNeighborsexplored());
                 System.out.println("test solver");
                 System.out.println("VALID: " + greedyschedule.isValid());

@@ -25,8 +25,15 @@ public interface Solver {
             case "lrpt": return new GreedySolver(GreedySolver.Priority.LRPT);
             case "estspt": return new GreedySolver(GreedySolver.Priority.EST_SPT);
             case "estlrpt": return new GreedySolver(GreedySolver.Priority.EST_LRPT);
-            case "desspt": return new DescentSolver(new Nowicki(),new GreedySolver(GreedySolver.Priority.EST_SPT));
-            case "deslrpt": return new DescentSolver(new Nowicki(),new GreedySolver(GreedySolver.Priority.EST_LRPT));
+            case "desspt": return new DescentSolver(new Nowicki(),new GreedySolver(GreedySolver.Priority.SPT));
+            case "deslrpt": return new DescentSolver(new Nowicki(),new GreedySolver(GreedySolver.Priority.LRPT));
+            case "desestspt": return new DescentSolver(new Nowicki(),new GreedySolver(GreedySolver.Priority.EST_SPT));
+            case "desestlrpt": return new DescentSolver(new Nowicki(),new GreedySolver(GreedySolver.Priority.EST_LRPT));
+            case "taboo4": return new TabooSolver(new Nowicki(),new GreedySolver(GreedySolver.Priority.EST_LRPT),1000,4);
+            case "taboo7": return new TabooSolver(new Nowicki(),new GreedySolver(GreedySolver.Priority.EST_LRPT),1000,7);
+            case "taboo10": return new TabooSolver(new Nowicki(),new GreedySolver(GreedySolver.Priority.EST_LRPT),1000,10);
+            case "taboo13": return new TabooSolver(new Nowicki(),new GreedySolver(GreedySolver.Priority.EST_LRPT),1000,13);
+            case "taboo40": return new TabooSolver(new Nowicki(),new GreedySolver(GreedySolver.Priority.EST_LRPT),1000,40);
             default: throw new RuntimeException("Unknown solver: "+ name);
         }
     }
